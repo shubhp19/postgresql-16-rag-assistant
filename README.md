@@ -40,22 +40,28 @@ The index can also be built automatically on first app launch, or rebuilt from t
 
 ```text
 pg_rag_app/
-├── app.py                  # Streamlit UI
-├── build_index.py          # One-shot index builder
-├── requirements.txt
-├── .env.example            # Placeholder environment file only
+├── app.py                         # Streamlit UI
+├── build_index.py                 # One-shot index builder
+├── requirements.txt               # Python dependencies
+├── .env.example                   # Placeholder environment file only
 ├── .gitignore
 ├── src/
-│   ├── ingest.py           # Fetches and chunks PostgreSQL docs
-│   ├── vectorstore.py      # Embeddings, FAISS index, retrieval
-│   └── rag.py              # Guardrail, prompt, LLM call, citation validation
+│   ├── __init__.py
+│   ├── ingest.py                  # Fetches and chunks PostgreSQL docs
+│   ├── vectorstore.py             # Embeddings, FAISS index, dense retrieval
+│   ├── hybrid_retriever.py        # BM25, hybrid retrieval, optional reranking
+│   └── rag.py                     # Guardrails, prompt, LLM call, citation validation
 ├── eval/
-│   ├── qa_dataset.json     # 15 curated Q&A pairs
-│   └── run_eval.py         # Retrieval and answer-quality evaluation
-└── data/                   # Created at runtime and ignored by Git
+│   ├── __init__.py
+│   ├── qa_dataset.json            # 15 curated Q&A examples
+│   ├── run_eval.py                # Recall@k and answer cosine evaluation
+│   ├── chunk_ablation.py          # Chunk-size evaluation script
+│   ├── retrieval_compare.py       # Dense/BM25/hybrid/reranker comparison
+│   ├── chunk_ablation_results.csv
+│   └── retrieval_compare_results.csv
+└── data/                          # Created at runtime and ignored by Git
     ├── faiss.index
     └── chunks_meta.pkl
-```
 
 ---
 
