@@ -1,0 +1,92 @@
+[
+  {
+    "id": "q01",
+    "question": "What is the purpose of the RETURNING clause in an INSERT statement?",
+    "reference_answer": "The RETURNING clause in INSERT allows you to return values of columns from rows that were inserted. This is useful when you need the auto-generated primary key or a computed default value without issuing a separate SELECT query.",
+    "relevant_sources": ["sql-insert"]
+  },
+  {
+    "id": "q02",
+    "question": "What is the difference between DELETE and TRUNCATE in PostgreSQL?",
+    "reference_answer": "DELETE removes rows one at a time and logs each deletion, supports WHERE clauses and triggers, and can be rolled back. TRUNCATE removes all rows at once by deallocating data pages, is much faster for large tables, does not fire row-level triggers, and also supports rollback within a transaction in PostgreSQL.",
+    "relevant_sources": ["sql-delete", "sql-truncate"]
+  },
+  {
+    "id": "q03",
+    "question": "How does a partial index work and when would you use one?",
+    "reference_answer": "A partial index is built over a subset of table rows defined by a WHERE condition. It is smaller than a full index and only helps queries whose WHERE clause matches the index predicate. A common use case is indexing only active rows or non-null values to keep the index compact and fast.",
+    "relevant_sources": ["indexes-partial", "sql-createindex"]
+  },
+  {
+    "id": "q04",
+    "question": "What does VACUUM do in PostgreSQL and why is it necessary?",
+    "reference_answer": "VACUUM reclaims storage occupied by dead tuples left behind by UPDATE and DELETE operations due to PostgreSQL's MVCC model. Without regular vacuuming, tables grow with dead row versions and transaction ID wraparound can occur. VACUUM FULL rewrites the table to reclaim disk space fully but requires an exclusive lock.",
+    "relevant_sources": ["sql-vacuum", "mvcc"]
+  },
+  {
+    "id": "q05",
+    "question": "What isolation levels does PostgreSQL support and what anomalies does each prevent?",
+    "reference_answer": "PostgreSQL supports Read Committed (default), Repeatable Read, and Serializable. Read Committed prevents dirty reads. Repeatable Read additionally prevents non-repeatable reads and phantom reads. Serializable provides full transaction isolation as if transactions ran one at a time, preventing all anomalies including write skew.",
+    "relevant_sources": ["sql-set-transaction", "mvcc"]
+  },
+  {
+    "id": "q06",
+    "question": "How does EXPLAIN ANALYZE differ from EXPLAIN in PostgreSQL?",
+    "reference_answer": "EXPLAIN shows the query plan the planner intends to execute with estimated costs and row counts. EXPLAIN ANALYZE actually executes the query and shows real execution times and actual row counts alongside the estimates, making it far more useful for diagnosing performance problems.",
+    "relevant_sources": ["sql-explain"]
+  },
+  {
+    "id": "q07",
+    "question": "What is a SAVEPOINT and how do you use it in a transaction?",
+    "reference_answer": "A SAVEPOINT marks a point within an open transaction to which you can roll back without aborting the whole transaction. You create one with SAVEPOINT name, roll back to it with ROLLBACK TO SAVEPOINT name, and release it with RELEASE SAVEPOINT name. This is useful for nested error handling inside a transaction.",
+    "relevant_sources": ["sql-savepoint", "sql-begin", "sql-rollback"]
+  },
+    {
+    "id": "q08",
+    "question": "What is the MVCC model in PostgreSQL and how does it handle concurrent reads and writes?",
+    "reference_answer": "MVCC (Multi-Version Concurrency Control) gives each transaction a consistent snapshot of the database at the moment the transaction started. Readers never block writers and writers never block readers because each sees its own version of rows. Old versions of rows are kept in the heap until VACUUM removes them.",
+    "relevant_sources": ["mvcc"]
+  },
+  {
+    "id": "q09",
+    "question": "How is a materialized view refreshed in PostgreSQL and what should you know about CONCURRENTLY?",
+    "reference_answer": "A materialized view is refreshed using REFRESH MATERIALIZED VIEW, which replaces the stored query result with a new result from the underlying query. Using CONCURRENTLY allows reads during the refresh, but it requires at least one unique index on the materialized view.",
+    "relevant_sources": ["sql-refreshmaterializedview"]
+  },
+  {
+    "id": "q10",
+    "question": "What does the GRANT statement do and what are common privileges you can grant on a table?",
+    "reference_answer": "GRANT gives a specified privilege to a role or user. Common table-level privileges include SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, and TRIGGER. You can grant all at once with GRANT ALL PRIVILEGES. Privileges can also be granted with the GRANT OPTION so the recipient can further grant them.",
+    "relevant_sources": ["sql-grant"]
+  },
+  {
+    "id": "q11",
+    "question": "What is the difference between a B-tree index and a GIN index in PostgreSQL?",
+    "reference_answer": "A B-tree index is the default and is best for equality and range queries on scalar values. A GIN (Generalized Inverted Index) is designed for composite values like arrays, JSONB, and full-text search where a single column value can contain multiple indexable keys. GIN is larger and slower to update but much faster for containment and element lookups.",
+    "relevant_sources": ["indexes", "sql-createindex"]
+  },
+  {
+    "id": "q12",
+    "question": "How does the MERGE statement work in PostgreSQL 16?",
+    "reference_answer": "MERGE performs insert, update, or delete on a target table based on a join with a source table. You define WHEN MATCHED and WHEN NOT MATCHED clauses to specify what action to take. It is useful for upsert patterns and data synchronization tasks in a single atomic statement.",
+    "relevant_sources": ["sql-merge"]
+  },
+  {
+    "id": "q13",
+    "question": "What constraints can you add to a column when creating a table in PostgreSQL?",
+    "reference_answer": "When creating a table you can add NOT NULL, UNIQUE, PRIMARY KEY, CHECK, and FOREIGN KEY constraints either at the column level or as table-level constraints. DEFAULT sets a default value. PostgreSQL also supports GENERATED ALWAYS AS IDENTITY for auto-incrementing columns as an alternative to SERIAL.",
+    "relevant_sources": ["sql-createtable", "ddl-constraints"]
+  },
+  {
+    "id": "q14",
+    "question": "How does COPY work in PostgreSQL and when would you use it over INSERT?",
+    "reference_answer": "COPY moves data between a table and a file or stdin/stdout in bulk. COPY FROM loads data into a table and COPY TO exports it. It is significantly faster than individual INSERT statements for large data loads because it bypasses row-by-row processing overhead. It supports CSV, text, and binary formats.",
+    "relevant_sources": ["sql-copy"]
+  },
+  {
+    "id": "q15",
+    "question": "What happens to a transaction if an error occurs after BEGIN but before COMMIT?",
+    "reference_answer": "If an error occurs after BEGIN, PostgreSQL puts the transaction in an aborted state and rejects all further commands except ROLLBACK or ROLLBACK TO SAVEPOINT. The transaction is effectively dead and must be rolled back explicitly. No changes from that transaction are committed to the database.",
+    "relevant_sources": ["sql-begin", "sql-commit", "sql-rollback"]
+  }
+]

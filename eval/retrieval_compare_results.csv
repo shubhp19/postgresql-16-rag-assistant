@@ -1,0 +1,6 @@
+strategy,mean_recall_at_5,avg_latency_ms
+dense,0.878,141.5
+bm25,0.8,2.6
+hybrid,0.933,11.7
+rerank,0.911,1487.3
+hybrid_rerank,0.944,1328.5
